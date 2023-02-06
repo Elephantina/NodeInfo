@@ -58,9 +58,8 @@ export type Config = {
 	metadata: Get<Record<string, unknown>>
 }
 
-type getFunc<T> = () => Promise<T>
-type Get<T> = T | getFunc<T>
+type Get<T> = T | (() => Promise<T>)
 
 const getData = async <T>(g: Get<T>): Promise<T> => {
-	return typeof g === 'function' ? await g() : g
+	return g instanceof Function ? await g() : g
 }
